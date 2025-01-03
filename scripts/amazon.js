@@ -1,3 +1,5 @@
+import { cart as cart } from '../data/cart.js';
+
 
 let productsHTML = '';
 
