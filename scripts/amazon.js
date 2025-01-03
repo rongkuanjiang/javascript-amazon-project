@@ -1,10 +1,10 @@
-import { cart as cart } from '../data/cart.js';
-
+import { cart } from '../data/cart.js';
+import { products } from '../data/products.js';
 
 let productsHTML = '';
 
 products.forEach((product) => {
-	html = `<div class="product-container">
+	const html = `<div class="product-container">
 				<div class="product-image-container">
 					<img class="product-image"
 					src="${product.image}">
