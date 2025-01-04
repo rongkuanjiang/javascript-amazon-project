@@ -7,9 +7,6 @@ const currentTime = dayjs();
 const deliveryDate = currentTime.add(7, 'days');
 console.log(deliveryDate.format('dddd, MMMM D'));
 
-
-loadCheckout();
-
 //load cart
 function loadCheckout() {
 	let fullHTML = '';
@@ -115,9 +112,6 @@ function loadCheckout() {
 	document.querySelector('.order-summary').innerHTML = fullHTML;
 }
 
-
-
-makeDeleteButtonsInteractive();
 function makeDeleteButtonsInteractive() {
 	document.querySelectorAll('.js-cart-delete')
 	.forEach((deleteButton) => {
@@ -130,3 +124,6 @@ function makeDeleteButtonsInteractive() {
 		});
 	});
 }
+
+loadCheckout();
+makeDeleteButtonsInteractive();

@@ -40,7 +40,8 @@ function addToCart(productId) {
 	else {
 		cart.push({
 			productId: productId,
-			quantity: 1
+			quantity: 1,
+			deliveryOptionId: '1'
 		});
 	}
 
