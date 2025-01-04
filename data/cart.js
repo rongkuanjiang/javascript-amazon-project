@@ -1,14 +1,29 @@
-export let cart = [
-{
-	productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
-	quantity: 2
-},
-{
-	productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d',
-	quantity: 1
-}];
+export let cartCount = getCartCount();
+export let cart = getCart();
 
-let cartCount = 0;
+
+function getCartCount() {
+	let cartCount = JSON.parse(localStorage.getItem('cartCount'));
+	if (!cartCount || cartCount <= 0) {
+		cartCount = 0;
+	} 
+	return cartCount;
+}
+
+function getCart() {
+	let cart = JSON.parse(localStorage.getItem('cart'));
+	if (!cart) {
+		cart = [];
+	} 
+	return cart;
+}
+
+
+export function loadCartCounter() {
+	document.querySelector('.js-cart-quantity').innerHTML = cartCount;
+}
+
+
 
 function addToCart(productId) {
 	let matched = false;
@@ -28,6 +43,11 @@ function addToCart(productId) {
 			quantity: 1
 		});
 	}
+
+	updateCartCount('add', 1);
+	saveToStorage();
+	loadCartCounter();
+	console.log(cartCount, cart);
 }
 
 function updateCartCount(addOrRemove, count) {
@@ -37,7 +57,8 @@ function updateCartCount(addOrRemove, count) {
 	else {
 		cartCount -= count;
 	}
-	document.querySelector('.js-cart-quantity').innerHTML = cartCount;
+
+	localStorage.setItem('cartCount', JSON.stringify(cartCount));
 }
 
 export function makeAddToCartInteractive() {
@@ -46,13 +67,25 @@ export function makeAddToCartInteractive() {
 			const productId = addToCartButton.dataset.productId;
 			
 			addToCart(productId);
-			updateCartCount('add', 1);
-
-			console.log(cart);	
 		});
 	});
+	saveToStorage();
 }
 
 export function removeFromCart(productId) {
+	const itemToRemove = cart.find(cartItem => cartItem.productId === productId);
+
+	// If it exists, call updateCartCount() with the item’s quantity
+	if (itemToRemove) {
+	  updateCartCount('remove', itemToRemove.quantity);
+	}
+	
+	// Now actually remove it from the cart
 	cart = cart.filter(cartItem => cartItem.productId !== productId);
+  
+	saveToStorage();
+}
+
+export function saveToStorage() {
+	localStorage.setItem('cart', JSON.stringify(cart));
 }

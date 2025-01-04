@@ -8,10 +8,10 @@ const deliveryDate = currentTime.add(7, 'days');
 console.log(deliveryDate.format('dddd, MMMM D'));
 
 
-loadCart();
+loadCheckout();
 
 //load cart
-function loadCart() {
+function loadCheckout() {
 	let fullHTML = '';
 	cart.forEach(cartItem => {
 		let productFullSpecification;

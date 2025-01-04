@@ -1,4 +1,4 @@
-import { makeAddToCartInteractive } from '../data/cart.js';
+import { loadCartCounter, makeAddToCartInteractive } from '../data/cart.js';
 import { products } from '../data/products.js';
 import {formatPrice } from './utils/money.js';
 
@@ -61,6 +61,7 @@ function loadPage() {
 		productsHTML += html;
 	});
 	document.querySelector('.js-products-grid').innerHTML = productsHTML;
+	loadCartCounter();
 }
 
 
