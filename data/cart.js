@@ -19,7 +19,6 @@ function getCart() {
 	return cart;
 }
 
-
 export function loadCartCounter() {
 	document.querySelector('.js-cart-quantity').innerHTML = cartCount;
 }

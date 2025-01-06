@@ -1,6 +1,6 @@
 import { cart } from '../../data/cart.js';
 import { calculatePrice } from '../utils/money.js';
-import { deliveryOptions } from '../../data/deliveryOptions.js';
+import { getDeliveryOption } from '../../data/deliveryOptions.js';
 import { getProduct } from '../../data/products.js';
 
 const tax = 10;
@@ -22,13 +22,8 @@ export function loadPaymentSummary() {
 		itemsPrice += quantity * itemPrice;
 
 
-		let shippingCostItem; 
-		deliveryOptions.forEach((deliveryOption) => {
-			if (String(deliveryOption.id) === String(cartItem.deliveryOptionId)) {
-				shippingCostItem = deliveryOption.priceCents;
-			}
-			
-		});
+		const shippingCostItem = getDeliveryOption(cartItem.deliveryOptionId).priceCents;
+		
 	
 		shippingCost += shippingCostItem;
 	});

@@ -1,14 +1,14 @@
 import { cart, removeFromCart, saveToStorage } from '../../data/cart.js';
 import { getProduct } from '../../data/products.js';
 import {formatPrice} from '../utils/money.js';
-import { deliveryOptions } from '../../data/deliveryOptions.js';
+import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { loadCheckout } from '../checkout.js';
 import { loadPaymentSummary } from './paymentSummary.js';
 export const currentTime = dayjs();
 
 //takes a cartItem and generates all the HTML for its delivery options
-function getDeliveryOptions(cartItem) {
+function getDeliveryHTML(cartItem) {
 	//console.log('getdeliveryoptions beginning cart: ', cartItem);
 	let fullHTML = '';
 	deliveryOptions.forEach(deliveryOption => {
@@ -81,7 +81,7 @@ export function loadDeliveryOptions() {
 		const cartItemId = deliveryOptions.dataset.cartItemId;
 		const cartItem = cart.find(item => item.productId === cartItemId);
 
-		const html = getDeliveryOptions(cartItem);
+		const html = getDeliveryHTML(cartItem);
 		deliveryOptions.innerHTML = html;
 
 	});
@@ -108,8 +108,8 @@ function getOrderSummary() {
 	cart.forEach(cartItem => {
 		const productFullSpecification = getProduct(cartItem.productId);
 		
-
-		const dateString = currentTime.add(deliveryOptions[cartItem.deliveryOptionId].deliveryTime, 'days').format('dddd, MMMM D');
+		const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
+		const dateString = currentTime.add(deliveryOption.deliveryTime, 'days').format('dddd, MMMM D');
 		
 		const html = `<div class="cart-item-container js-${cartItem.productId}">
 		<div class="delivery-date">${dateString}</div>
