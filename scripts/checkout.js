@@ -8,7 +8,7 @@ import {makeDeliveryOptionButtonsInteractive, makeDeleteButtonsInteractive, load
 console.log('cart at page load:', cart);
 
 //load cart
-function loadCheckout() {
+export function loadCheckout() {
 	loadMainHTML();
 	loadDeliveryOptions();	
 	

@@ -2,7 +2,7 @@ import { cart, removeFromCart, saveToStorage } from '../../data/cart.js';
 import {formatPrice} from '../utils/money.js';
 import { deliveryOptions } from '../../data/deliveryOptions.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-
+import { loadCheckout } from '../checkout.js';
 export const currentTime = dayjs();
 
 //takes a cartItem and generates all the HTML for its delivery options
