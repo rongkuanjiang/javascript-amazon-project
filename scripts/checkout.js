@@ -13,8 +13,4 @@ export function loadCheckout() {
 	makeDeliveryOptionButtonsInteractive();
 }
 
-
-
-
-
 loadCheckout();
