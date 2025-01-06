@@ -2,6 +2,7 @@ export let cartCount = getCartCount();
 export let cart = getCart();
 
 
+
 function getCartCount() {
 	let cartCount = JSON.parse(localStorage.getItem('cartCount'));
 	if (!cartCount || cartCount <= 0) {
@@ -41,7 +42,7 @@ function addToCart(productId) {
 		cart.push({
 			productId: productId,
 			quantity: 1,
-			deliveryOptionId: '1'
+			deliveryOptionId: '0'
 		});
 	}
 

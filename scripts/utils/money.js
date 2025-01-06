@@ -1,3 +1,8 @@
 export function formatPrice(priceCents) {
-	return (priceCents / 100).toFixed(2);
+	if(priceCents == 0) {
+		return 'FREE';
+	}
+	else {
+		return `$${(priceCents / 100).toFixed(2)}`;
+	}
 }
