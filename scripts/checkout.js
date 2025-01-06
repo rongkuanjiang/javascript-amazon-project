@@ -1,16 +1,17 @@
 import { cart } from '../data/cart.js';
-import { products } from '../data/products.js';
+import { getProduct } from '../data/products.js';
 import {formatPrice} from './utils/money.js';
 import { deliveryOptions } from '../data/deliveryOptions.js';
 import {makeDeliveryOptionButtonsInteractive, makeDeleteButtonsInteractive, loadDeliveryOptions, currentTime} from './checkout/orderSummary.js';
+import {loadPayment} from './checkout/paymentSummary.js';
 
-
-console.log('cart at page load:', cart);
+//console.log('cart at page load:', cart);
 
 //load cart
 export function loadCheckout() {
 	loadMainHTML();
 	loadDeliveryOptions();	
+	loadPayment();
 	
 	makeDeleteButtonsInteractive();
 	makeDeliveryOptionButtonsInteractive();
@@ -23,10 +24,9 @@ function loadMainHTML() {
 
 function getMainHTML() {
 	let fullHTML = '';
+	
 	cart.forEach(cartItem => {
-		let productFullSpecification = products.find((product) => {
-			return cartItem.productId === product.id;
-		});
+		const productFullSpecification = getProduct(cartItem.productId);
 		
 
 		const dateString = currentTime.add(deliveryOptions[cartItem.deliveryOptionId].deliveryTime, 'days').format('dddd, MMMM D');
@@ -43,7 +43,7 @@ function getMainHTML() {
 			${productFullSpecification.name}
 			</div>
 			<div class="product-price">
-			${formatPrice(productFullSpecification.priceCents)}
+			${String(formatPrice(productFullSpecification.priceCents))}
 			</div>
 			<div class="product-quantity">
 			<span>

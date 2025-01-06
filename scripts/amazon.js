@@ -1,6 +1,6 @@
 import { loadCartCounter, makeAddToCartInteractive } from '../data/cart.js';
 import { products } from '../data/products.js';
-import {formatPrice } from './utils/money.js';
+import {calculatePrice } from './utils/money.js';
 
 
 let productsHTML = '';
@@ -29,7 +29,7 @@ function loadPage() {
 					</div>
 
 					<div class="product-price">
-						${formatPrice(product.priceCents)}
+						$${String(calculatePrice(product.priceCents))}
 					</div>
 
 					<div class="product-quantity-container">

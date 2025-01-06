@@ -3,17 +3,18 @@ import {formatPrice} from '../utils/money.js';
 import { deliveryOptions } from '../../data/deliveryOptions.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { loadCheckout } from '../checkout.js';
+import { loadPayment } from './paymentSummary.js';
 export const currentTime = dayjs();
 
 //takes a cartItem and generates all the HTML for its delivery options
 function getDeliveryOptions(cartItem) {
-	console.log('getdeliveryoptions beginning cart: ', cartItem);
+	//console.log('getdeliveryoptions beginning cart: ', cartItem);
 	let fullHTML = '';
 	deliveryOptions.forEach(deliveryOption => {
 		const deliveryDate = currentTime.add(deliveryOption.deliveryTime, 'days');
 		const dateString = deliveryDate.format('dddd, MMMM D');
 		const checkedAttribute = checkedOrNot(cartItem.deliveryOptionId, deliveryOption.id);
-		console.log(checkedAttribute);
+		//console.log(checkedAttribute);
 		const html = `
 		<div class="delivery-option">
 			<input type="radio" ${checkedAttribute} 
@@ -26,11 +27,11 @@ function getDeliveryOptions(cartItem) {
 				${dateString}
 				</div>
 				<div class="delivery-option-price">
-				${formatPrice(deliveryOption.priceCents)} Shipping
+				${String(formatPrice(deliveryOption.priceCents))} Shipping
 				</div>
 			</div>
 		</div>`;
-		console.log(html);
+		//console.log(html);
 		fullHTML += html;
 	});
 	return fullHTML;
@@ -43,18 +44,19 @@ export function makeDeliveryOptionButtonsInteractive() {
 		radio.addEventListener('change', (event) => {
 		  const newOptionId = event.target.dataset.optionId;
 		  const productId = event.target.dataset.productId;
-		  console.log(newOptionId, productId);
+		  //console.log(newOptionId, productId);
 		  // Update this cartItem in your cart array
 		  const cartItem = cart.find(item => item.productId === productId);
-		  console.log(cartItem);
+		  //console.log(cartItem);
 		  if (cartItem) {
 			cartItem.deliveryOptionId = String(newOptionId);
 		  }
-		  console.log(cartItem);
+		  //console.log(cartItem);
 		  // console.log(cartItem.deliveryOptionId);
 		  // Persist to localStorage (or wherever you save)
 		  saveToStorage();
 		  loadCheckout();
+		  loadPayment();
 		});
 	  });
 }
@@ -68,6 +70,7 @@ export function makeDeleteButtonsInteractive() {
 
 			const cartItemToRemove = document.querySelector(`.js-${productId}`);
 			cartItemToRemove.remove();
+			loadCheckout();
 		});
 	});
 }
@@ -84,7 +87,7 @@ export function loadDeliveryOptions() {
 }
 
 function checkedOrNot(deliveryOptionId, optionNumber){
-	console.log('deliveryoptionid and optionnumber', deliveryOptionId, optionNumber);
+	//console.log('deliveryoptionid and optionnumber', deliveryOptionId, optionNumber);
 	if (String(deliveryOptionId) === String(optionNumber)) {
 		return 'checked';
 	}
