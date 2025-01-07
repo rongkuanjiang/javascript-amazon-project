@@ -1,6 +1,6 @@
 export let cartCount = getCartCount();
-export let cart = getCart();
-
+export let cart;
+getCart();
 
 
 function getCartCount() {
@@ -11,13 +11,30 @@ function getCartCount() {
 	return cartCount;
 }
 
-function getCart() {
-	let cart = JSON.parse(localStorage.getItem('cart'));
-	if (!cart) {
-		cart = [];
-	} 
-	return cart;
+// export function getCart() {
+// 	let cart = JSON.parse(localStorage.getItem('cart'));
+// 	if (!cart) {
+// 		cart = [];
+// 	} 
+// 	return cart;
+// }
+
+export function getCart() {
+  const storedCart = localStorage.getItem('cart');
+
+  if (storedCart) {
+    try {
+      cart = JSON.parse(storedCart);
+    } catch (error) {
+      console.error("Parsing error:", error);
+      cart = [];
+    }
+  } else {
+    // If cart is not yet set in localStorage, use an empty array
+    cart = [];
+  }
 }
+
 
 export function loadCartCounter() {
 	document.querySelector('.js-cart-quantity').innerHTML = cartCount;
@@ -25,7 +42,7 @@ export function loadCartCounter() {
 
 
 
-function addToCart(productId) {
+export function addToCart(productId) {
 	let matched = false;
 
 	cart.forEach((cartItem) => {
@@ -45,10 +62,7 @@ function addToCart(productId) {
 		});
 	}
 
-	updateCartCount('add', 1);
 	saveToStorage();
-	loadCartCounter();
-	console.log(cartCount, cart);
 }
 
 function updateCartCount(addOrRemove, count) {
@@ -67,7 +81,9 @@ export function makeAddToCartInteractive() {
 		addToCartButton.addEventListener('click', () => {
 			const productId = addToCartButton.dataset.productId;
 			
+			updateCartCount('add', 1);	
 			addToCart(productId);
+			loadCartCounter();
 		});
 	});
 	saveToStorage();
