@@ -99,7 +99,7 @@ function checkedOrNot(deliveryOptionId, optionNumber){
 
 export function loadOrderSummary() {
 	const fullHTML = getOrderSummary();
-	document.querySelector('.order-summary').innerHTML = fullHTML;
+	document.querySelector('.js-order-summary').innerHTML = fullHTML;
 }
 
 function getOrderSummary() {
