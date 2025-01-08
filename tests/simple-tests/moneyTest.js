@@ -1,4 +1,4 @@
-import {calculatePrice} from './money.js';
+import {calculatePrice} from '../../scripts/utils/money.js';
 
 console.log('test suite: calculatePrice');
 
