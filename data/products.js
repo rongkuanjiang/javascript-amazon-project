@@ -724,7 +724,7 @@ export function loadProducts(fun) {
   const productRequest = new XMLHttpRequest();
   productRequest.addEventListener('load', () => { 
     products = JSON.parse(productRequest.response);
-    
+
     products = products.map((productDetails) => {
       if (productDetails.type === 'clothing') {
         return new Clothing(productDetails);
@@ -732,7 +732,7 @@ export function loadProducts(fun) {
         return new Product(productDetails);
       }
     });
-
+    console.log(products);
     fun();
    });
   productRequest.open('GET', 'https://supersimplebackend.dev/products');

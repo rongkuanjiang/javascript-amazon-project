@@ -106,3 +106,24 @@ export function removeFromCart(productId) {
 export function saveToStorage() {
 	localStorage.setItem('cart', JSON.stringify(cart));
 }
+
+let cartExperiment;
+
+export function loadCart(fun) {
+	const xhr = new XMLHttpRequest();
+	
+	xhr.addEventListener('load', () => {
+		cartExperiment = xhr.response;
+		console.log(cartExperiment);
+		fun();
+	});
+	
+	xhr.open('GET', 'https://supersimplebackend.dev/cart');
+	xhr.send();
+}
+
+
+
+
+
+

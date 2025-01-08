@@ -1,4 +1,4 @@
-class Cart {
+/*class Cart {
 	cartItems;
 	#localStorageKey;
 
@@ -80,4 +80,4 @@ class Cart {
 
 
 export let cart = new Cart('cart');
-export let businessCart = new Cart('businessCart');
+export let businessCart = new Cart('businessCart'); */
