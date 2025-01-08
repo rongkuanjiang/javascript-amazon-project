@@ -1,12 +1,10 @@
 import { loadCartCounter, makeAddToCartInteractive } from '../data/cart.js';
-import { products } from '../data/products.js';
+import { products, loadProducts } from '../data/products.js';
 
-
+loadProducts(loadPage);
 
 let productsHTML = '';
 
-loadPage();
-makeAddToCartInteractive();
 
 function loadPage() {
 	products.forEach((product) => {
@@ -64,6 +62,7 @@ function loadPage() {
 	});
 	document.querySelector('.js-products-grid').innerHTML = productsHTML;
 	loadCartCounter();
+	makeAddToCartInteractive();
 }
 
 

@@ -49,7 +49,7 @@ class Clothing extends Product {
   }
 }
 
-
+/*
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -715,6 +715,29 @@ export const products = [
   } else {
     return new Product(productDetails);
   }
-});
+});*/
+
+export let products = [];
+
+
+export function loadProducts(fun) {
+  const productRequest = new XMLHttpRequest();
+  productRequest.addEventListener('load', () => { 
+    products = JSON.parse(productRequest.response);
+    
+    products = products.map((productDetails) => {
+      if (productDetails.type === 'clothing') {
+        return new Clothing(productDetails);
+      } else {
+        return new Product(productDetails);
+      }
+    });
+
+    fun();
+   });
+  productRequest.open('GET', 'https://supersimplebackend.dev/products');
+  productRequest.send();
+}
+
 
 
