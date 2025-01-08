@@ -81,5 +81,3 @@ class Cart {
 
 export let cart = new Cart('cart');
 export let businessCart = new Cart('businessCart');
-console.log(cart);
-console.log(businessCart);
