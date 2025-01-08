@@ -731,9 +731,12 @@ export function loadProductsFetch() {
         return new Product(productDetails);
       }
     });
+  }).catch((error) => {
+    console.log('error !!!');
   });
   return productPromise;
 }
+
 
 export function loadProducts(fun) {
   const productRequest = new XMLHttpRequest();
