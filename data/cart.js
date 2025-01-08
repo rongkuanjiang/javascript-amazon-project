@@ -114,7 +114,6 @@ export function loadCart(fun) {
 	
 	xhr.addEventListener('load', () => {
 		cartExperiment = xhr.response;
-		console.log(cartExperiment);
 		fun();
 	});
 	
