@@ -719,6 +719,21 @@ export const products = [
 
 export let products = [];
 
+export function loadProductsFetch() {
+  const productPromise = fetch('https:supersimplebackend.dev/products').
+  then((response) => {
+    return response.json();
+  }).then((productsData) => {
+    products = productsData.map((productDetails) => {
+      if (productDetails.type === 'clothing') {
+        return new Clothing(productDetails);
+      } else {
+        return new Product(productDetails);
+      }
+    });
+  });
+  return productPromise;
+}
 
 export function loadProducts(fun) {
   const productRequest = new XMLHttpRequest();

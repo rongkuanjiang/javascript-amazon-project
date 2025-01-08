@@ -1,14 +1,10 @@
 import {makeDeliveryOptionButtonsInteractive, makeDeleteButtonsInteractive, loadDeliveryOptions, loadOrderSummary } from './checkout/orderSummary.js';
 import {loadPaymentSummary} from './checkout/paymentSummary.js';
 import '../backend/backendPractice.js';
-import { loadProducts } from '../data/products.js';
+import { loadProducts, loadProductsFetch } from '../data/products.js';
 import { loadCart } from '../data/cart.js';
 
-new Promise((resolve) => {	
-	loadProducts(() => {
-		resolve();
-	});
-}).then(() => {
+loadProductsFetch().then(() => {
 	return new Promise((resolve) => {
 		loadCart(() => {
 			resolve();
