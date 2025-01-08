@@ -6,8 +6,6 @@ export function getProduct(productId) {
   });
 }
 
-
-
 class Product {
   id;
   image;
@@ -30,8 +28,26 @@ class Product {
   getStarUrl() {
     return `images/ratings/rating-${this.rating.stars * 10}.png`;
   }
+
+  getExtraInfoHTML () {
+    return '';
+  }
 }
 
+class Clothing extends Product {
+  sizeChartLink;
+
+  constructor(productDetails) {
+    super(productDetails);
+    this.sizeChartLink = '../images/clothing-size-chart.png';
+  }
+
+  getExtraInfoHTML() {
+    return `
+    <a href="${this.sizeChartLink}" target="_blank">Size Chart</a>
+    `;
+  }
+}
 
 
 export const products = [
@@ -694,7 +710,12 @@ export const products = [
     ]
   }
 ].map((productDetails) => {
-  return new Product(productDetails);
+  if (productDetails.type === 'clothing') {
+    return new Clothing(productDetails);
+  } else {
+    return new Product(productDetails);
+  }
 });
 
 console.log(products);
+
