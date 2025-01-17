@@ -1,12 +1,17 @@
 import { loadCartCounter, makeAddToCartInteractive } from '../data/cart.js';
 import { products, loadProducts } from '../data/products.js';
 
-loadProducts(loadPage);
+//loadProducts(loadMainPage);
+loadProducts().then(() => {
+	renderMainPage();
+});
 
 let productsHTML = '';
+//loadMainPage();
 
+function renderMainPage() {
 
-function loadPage() {
+	//generate view of main section (it's a grid of products)
 	products.forEach((product) => {
 		const html = `<div class="product-container">
 					<div class="product-image-container">
@@ -61,8 +66,14 @@ function loadPage() {
 		productsHTML += html;
 	});
 	document.querySelector('.js-products-grid').innerHTML = productsHTML;
+	
+	//generate view of HTML elements dependent on data
 	loadCartCounter();
+
+	//make HTML elements interactive
 	makeAddToCartInteractive();
+	
+	//makeSearchInteractive();
 }
 
 

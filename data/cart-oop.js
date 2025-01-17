@@ -1,23 +1,19 @@
-/*class Cart {
+class Cart {
 	cartItems;
 	#localStorageKey;
+	#cartCount;
 
 	constructor(localStorageKey) {
 		this.#localStorageKey = localStorageKey;
-		this.getCart();
-		this.loadCartCounter;
+		this.loadCart();
+		this.#cartCount = this.loadCartCount();
+		this.renderCartCount();
 	}
 
-	getCartCount() {
-		return this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-	}
-	
-	loadCartCounter() {
-		const currentCount = this.getCartCount();
-		document.querySelector('.js-cart-quantity').textContent = currentCount;
-	}
 
-	getCart() {
+
+	//loads cartItems from localStorage 
+	loadCart() {
 		const storedCart = localStorage.getItem(this.#localStorageKey);
 	  
 		if (storedCart) {
@@ -33,6 +29,23 @@
 		}
 	}
 
+	//saves cartItems to localStorage
+	saveToStorage() {
+		localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
+	}
+
+
+
+	//helper function for renderCartCount
+	loadCartCount() {
+		return this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+	}
+	
+	renderCartCount() {
+		document.querySelector('.js-cart-quantity').textContent = this.#cartCount;
+	}
+
+	
 	addToCart(productId) {
 		let matched = false;
 	
@@ -72,12 +85,8 @@
 		this.cartItems = this.cartItems.filter(cartItem => cartItem.productId !== productId);
 		this.saveToStorage();
 	}
-
-	saveToStorage() {
-		localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
-	}
 }
 
 
 export let cart = new Cart('cart');
-export let businessCart = new Cart('businessCart'); */
+export let businessCart = new Cart('businessCart'); 

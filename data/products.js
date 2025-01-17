@@ -49,6 +49,47 @@ class Clothing extends Product {
   }
 }
 
+export let products = [];
+
+export function loadProducts() {
+  const productPromise = fetch('https:supersimplebackend.dev/products').
+  then((response) => {
+    return response.json();
+  }).then((productsData) => {
+    products = productsData.map((productDetails) => {
+      if (productDetails.type === 'clothing') {
+        return new Clothing(productDetails);
+      } else {
+        return new Product(productDetails);
+      }
+    });
+  }).catch((error) => {
+    console.log('error !!!');
+  });
+  return productPromise;
+}
+
+/*
+export function loadProducts(fun) {
+  const productRequest = new XMLHttpRequest();
+  productRequest.addEventListener('load', () => { 
+    products = JSON.parse(productRequest.response);
+
+    products = products.map((productDetails) => {
+      if (productDetails.type === 'clothing') {
+        return new Clothing(productDetails);
+      } else {
+        return new Product(productDetails);
+      }
+    });
+    console.log(products);
+    fun();
+   });
+  productRequest.open('GET', 'https://supersimplebackend.dev/products');
+  productRequest.send();
+} */
+
+
 /*
 export const products = [
   {
@@ -716,46 +757,15 @@ export const products = [
     return new Product(productDetails);
   }
 });*/
-
-export let products = [];
-
-export function loadProductsFetch() {
-  const productPromise = fetch('https:supersimplebackend.dev/products').
-  then((response) => {
-    return response.json();
-  }).then((productsData) => {
-    products = productsData.map((productDetails) => {
-      if (productDetails.type === 'clothing') {
-        return new Clothing(productDetails);
-      } else {
-        return new Product(productDetails);
-      }
+/*
+function loadEmProducts() {
+  const req = new XMLHttpRequest();
+  req.addEventListener('load', () => {
+    let products = JSON.parse(req.response);
+    products.map((product) => {
+      new Product(product);
     });
-  }).catch((error) => {
-    console.log('error !!!');
   });
-  return productPromise;
-}
-
-
-export function loadProducts(fun) {
-  const productRequest = new XMLHttpRequest();
-  productRequest.addEventListener('load', () => { 
-    products = JSON.parse(productRequest.response);
-
-    products = products.map((productDetails) => {
-      if (productDetails.type === 'clothing') {
-        return new Clothing(productDetails);
-      } else {
-        return new Product(productDetails);
-      }
-    });
-    console.log(products);
-    fun();
-   });
-  productRequest.open('GET', 'https://supersimplebackend.dev/products');
-  productRequest.send();
-}
-
-
-
+  req.open('GET', 'url');
+  req.send();
+} */

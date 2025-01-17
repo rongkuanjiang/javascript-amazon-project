@@ -1,18 +1,17 @@
 import {makeDeliveryOptionButtonsInteractive, makeDeleteButtonsInteractive, loadDeliveryOptions, loadOrderSummary } from './checkout/orderSummary.js';
 import {loadPaymentSummary} from './checkout/paymentSummary.js';
 import '../backend/backendPractice.js';
-import { loadProductsFetch } from '../data/products.js';
+import { loadProducts } from '../data/products.js';
 import { loadCart } from '../data/cart.js';
 
 
-async function realLoadcheckout() {
-	console.log('realLoadCheckout');
+async function renderCheckout() {
 	try {
-		await loadProductsFetch();
+		await loadProducts();
 		await new Promise((resolve) => {
-		loadCart(() => {
-			resolve();
-		});
+			loadCart(() => {
+				resolve();
+			});
 		});
 	} catch(error) {
 		console.log('error');
@@ -21,7 +20,7 @@ async function realLoadcheckout() {
 	loadCheckout();
 }
 
-realLoadcheckout();
+renderCheckout();
 
 /*
 loadProductsFetch().then(() => {

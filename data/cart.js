@@ -1,6 +1,6 @@
 export let cartCount = getCartCount();
 export let cart;
-getCart();
+loadCart();
 
 
 function getCartCount() {
@@ -19,21 +19,7 @@ function getCartCount() {
 // 	return cart;
 // }
 
-export function getCart() {
-  const storedCart = localStorage.getItem('cart');
 
-  if (storedCart) {
-    try {
-      cart = JSON.parse(storedCart);
-    } catch (error) {
-      console.error("Parsing error:", error);
-      cart = [];
-    }
-  } else {
-    // If cart is not yet set in localStorage, use an empty array
-    cart = [];
-  }
-}
 
 
 export function loadCartCounter() {
@@ -103,12 +89,33 @@ export function removeFromCart(productId) {
 	saveToStorage();
 }
 
+
+export function loadCart() {
+	const storedCart = localStorage.getItem('cart');
+  
+	if (storedCart) {
+	  try {
+		cart = JSON.parse(storedCart);
+	  } catch (error) {
+		console.error("Parsing error:", error);
+		cart = [];
+	  }
+	} else {
+	  // If cart is not yet set in localStorage, use an empty array
+	  cart = [];
+	}
+}
+
+
 export function saveToStorage() {
 	localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-let cartExperiment;
 
+
+// let cartExperiment;
+
+/*
 export function loadCart(fun) {
 	const xhr = new XMLHttpRequest();
 	
@@ -119,7 +126,7 @@ export function loadCart(fun) {
 	
 	xhr.open('GET', 'https://supersimplebackend.dev/cart');
 	xhr.send();
-}
+} */
 
 
 
