@@ -11,9 +11,6 @@ class Cart {
 	constructor(localStorageKey) {
 		this.#localStorageKey = localStorageKey;
 		this.loadCart();
-
-		//there's to render besides the cart count
-		this.renderCartCount();
 	}
 
 
@@ -68,6 +65,7 @@ class Cart {
 				deliveryOptionId: '0'
 			});
 		}
+		this.#cartCount++;
 	
 		this.saveToStorage();
 		this.renderCartCount();
@@ -79,7 +77,6 @@ class Cart {
 				const productId = addToCartButton.dataset.productId;
 
 				this.addToCart(productId);
-				this.loadCartCounter();
 			});
 		});
 		this.saveToStorage();
@@ -88,10 +85,16 @@ class Cart {
 	removeFromCart(productId) {
 		this.cartItems = this.cartItems.filter(cartItem => cartItem.productId !== productId);
 		this.saveToStorage();
-		this.renderCartCount();
+		this.#cartCount--;
 	}
 }
 
 
-export let cart = new Cart('cart');
+export let cart;
+
+try {
+	cart = new Cart('cart');
+} catch (error) {
+	console.log('cart initialization error', error);
+}
 export let businessCart = new Cart('businessCart'); 

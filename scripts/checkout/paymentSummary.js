@@ -1,4 +1,4 @@
-import { cart } from '../../data/cart.js';
+import { cart } from '../../data/cart-oop.js';
 import { calculatePrice } from '../utils/money.js';
 import { getDeliveryOption } from '../../data/deliveryOptions.js';
 import { getProduct } from '../../data/products.js';
@@ -13,7 +13,7 @@ export function loadPaymentSummary() {
 	/* 
 		^^ FIX formatPrice
 	*/
-	cart.forEach((cartItem) => {
+	cart.cartItems.forEach((cartItem) => {
 		const quantity = cartItem.quantity;
 		numberOfItems += quantity;
 		const productFullSpecification = getProduct(cartItem.productId);

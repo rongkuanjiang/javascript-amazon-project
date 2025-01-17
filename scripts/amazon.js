@@ -1,4 +1,4 @@
-import { loadCartCounter, makeAddToCartInteractive } from '../data/cart.js';
+import { cart } from '../data/cart-oop.js';
 import { products, loadProducts } from '../data/products.js';
 
 
@@ -75,10 +75,10 @@ function renderMainPage() {
 	document.querySelector('.js-products-grid').innerHTML = productsHTML;
 	
 	//generate view of HTML elements dependent on data
-	loadCartCounter();
+	cart.renderCartCount();
 
 	//make HTML elements interactive
-	makeAddToCartInteractive();
+	cart.makeAddToCartInteractive();
 	
 	//makeSearchInteractive();
 }

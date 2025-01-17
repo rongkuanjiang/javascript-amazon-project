@@ -2,7 +2,7 @@ import {makeDeliveryOptionButtonsInteractive, makeDeleteButtonsInteractive, load
 import {loadPaymentSummary} from './checkout/paymentSummary.js';
 import '../backend/backendPractice.js';
 import { loadProducts } from '../data/products.js';
-import { loadCart } from '../data/cart.js';
+import { cart } from '../data/cart-oop.js';
 
 
 async function renderCheckout() {
@@ -14,10 +14,9 @@ async function renderCheckout() {
 				resolve();
 			});
 		}); */
-		
 		loadCheckout();
 	} catch(error) {
-		console.log('error');
+		console.log('load checkout error');
 	}	
 }
 
@@ -38,11 +37,16 @@ loadProductsFetch().then(() => {
 //loadProducts(loadCheckout);
 //load checkout
 export function loadCheckout() {
-	loadOrderSummary();
-	loadDeliveryOptions();	
-	loadPaymentSummary();
-	
-	makeDeleteButtonsInteractive();
-	makeDeliveryOptionButtonsInteractive();
+	try {
+		loadOrderSummary();
+		loadPaymentSummary();
+
+		cart.renderCartCount();
+
+		makeDeleteButtonsInteractive();	
+		makeDeliveryOptionButtonsInteractive();
+	} catch (error) {
+		console.log(error);
+	}	
 }
 

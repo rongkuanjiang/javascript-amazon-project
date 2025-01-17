@@ -1,4 +1,4 @@
-import { cart, removeFromCart, saveToStorage } from '../../data/cart.js';
+import { cart } from '../../data/cart-oop.js';
 import { getProduct } from '../../data/products.js';
 import {formatPrice} from '../utils/money.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
@@ -47,7 +47,7 @@ export function makeDeliveryOptionButtonsInteractive() {
 		  const productId = event.target.dataset.productId;
 		  //console.log(newOptionId, productId);
 		  // Update this cartItem in your cart array
-		  const cartItem = cart.find(item => item.productId === productId);
+		  const cartItem = cart.cartItems.find(item => item.productId === productId);
 		  //console.log(cartItem);
 		  if (cartItem) {
 			cartItem.deliveryOptionId = String(newOptionId);
@@ -55,7 +55,7 @@ export function makeDeliveryOptionButtonsInteractive() {
 		  //console.log(cartItem);
 		  // console.log(cartItem.deliveryOptionId);
 		  // Persist to localStorage (or wherever you save)
-		  saveToStorage();
+		  cart.saveToStorage();
 		  loadCheckout();
 		  loadPaymentSummary();
 		});
@@ -67,7 +67,7 @@ export function makeDeleteButtonsInteractive() {
 	.forEach((deleteButton) => {
 		deleteButton.addEventListener('click', () => {
 			const productId = deleteButton.dataset.productId;
-			removeFromCart(productId);
+			cart.removeFromCart(productId);
 
 			const cartItemToRemove = document.querySelector(`.js-${productId}`);
 			cartItemToRemove.remove();
@@ -79,11 +79,10 @@ export function makeDeleteButtonsInteractive() {
 export function loadDeliveryOptions() {
 	document.querySelectorAll('.delivery-options-details').forEach((deliveryOptions) => {
 		const cartItemId = deliveryOptions.dataset.cartItemId;
-		const cartItem = cart.find(item => item.productId === cartItemId);
+		const cartItem = cart.cartItems.find(item => item.productId === cartItemId);
 
 		const html = getDeliveryHTML(cartItem);
 		deliveryOptions.innerHTML = html;
-
 	});
 }
 
@@ -98,16 +97,21 @@ function checkedOrNot(deliveryOptionId, optionNumber){
 }
 
 export function loadOrderSummary() {
-	const fullHTML = getOrderSummary();
-	document.querySelector('.js-order-summary').innerHTML = fullHTML;
+	try {
+		const fullHTML = getOrderSummary();
+		document.querySelector('.js-order-summary').innerHTML = fullHTML;
+		
+		loadDeliveryOptions();	
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 function getOrderSummary() {
 	let fullHTML = '';
 	
-	cart.forEach(cartItem => {
+	cart.cartItems.forEach(cartItem => {
 		const productFullSpecification = getProduct(cartItem.productId);
-		
 		const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
 		const dateString = currentTime.add(deliveryOption.deliveryTime, 'days').format('dddd, MMMM D');
 		
@@ -149,7 +153,7 @@ function getOrderSummary() {
 		</div>
 		</div>
 	</div>`;
-
+	
 	fullHTML += html; 
 	});
 	return fullHTML;
