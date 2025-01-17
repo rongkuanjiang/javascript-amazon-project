@@ -162,6 +162,27 @@
   font-size: 15px;
 }
 
+.view-products-link {
+  background-color: rgb(255, 216, 20);
+  padding: 8px 15px;
+  margin-top: 10px;
+  display: inline-block;
+  border-radius: 8px;
+  border: 1px, solid, rgb(255, 216, 0);
+}
+
+.view-products-link:hover {
+  background-color: rgb(205, 174, 21);
+  border-color:rgb(205, 174, 21);
+  
+}
+
+.view-products-link a {
+  text-decoration: none; /* Removes the underline */
+  color: inherit; /* Optional: Keeps the text color the same */
+}
+
+
 .payment-summary-title {
   font-weight: 700;
   font-size: 18px;

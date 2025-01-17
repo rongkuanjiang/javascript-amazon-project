@@ -99,8 +99,18 @@ function checkedOrNot(deliveryOptionId, optionNumber){
 export function loadOrderSummary() {
 	try {
 		const fullHTML = getOrderSummary();
-		document.querySelector('.js-order-summary').innerHTML = fullHTML;
-		
+		if (fullHTML == '') {
+			document.querySelector('.js-order-summary').innerHTML = `
+			<div>Your cart is empty</div>
+			<div class="view-products-link"> 
+				<a href="./amazon.html">
+					View products
+				</a>
+			</div>
+			`;
+		} else {
+			document.querySelector('.js-order-summary').innerHTML = fullHTML;
+		}
 		loadDeliveryOptions();	
 	} catch (error) {
 		console.log(error);
