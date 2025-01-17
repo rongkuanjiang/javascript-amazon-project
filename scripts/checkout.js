@@ -7,17 +7,18 @@ import { loadCart } from '../data/cart.js';
 
 async function renderCheckout() {
 	try {
+		
 		await loadProducts();
-		await new Promise((resolve) => {
+		/*await new Promise((resolve) => {
 			loadCart(() => {
 				resolve();
 			});
-		});
+		}); */
+		
+		loadCheckout();
 	} catch(error) {
 		console.log('error');
-	}
-	
-	loadCheckout();
+	}	
 }
 
 renderCheckout();

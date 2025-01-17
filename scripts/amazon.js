@@ -1,12 +1,19 @@
 import { loadCartCounter, makeAddToCartInteractive } from '../data/cart.js';
 import { products, loadProducts } from '../data/products.js';
 
-//loadProducts(loadMainPage);
-loadProducts().then(() => {
-	renderMainPage();
-});
 
 let productsHTML = '';
+
+
+if (products.length === 0) {
+	loadProducts().then(() => {
+		renderMainPage();
+	});
+} else {
+	console.log(products);
+	renderMainPage();
+} 
+
 //loadMainPage();
 
 function renderMainPage() {

@@ -1,3 +1,8 @@
+
+import { products, Product, Clothing } from "./products.js";
+
+
+
 class Cart {
 	cartItems;
 	#localStorageKey;
@@ -6,27 +11,31 @@ class Cart {
 	constructor(localStorageKey) {
 		this.#localStorageKey = localStorageKey;
 		this.loadCart();
-		this.#cartCount = this.loadCartCount();
+
+		//there's to render besides the cart count
 		this.renderCartCount();
 	}
 
 
 
-	//loads cartItems from localStorage 
+	//loads cartItems from localStorage
 	loadCart() {
 		const storedCart = localStorage.getItem(this.#localStorageKey);
 	  
 		if (storedCart) {
 		  try {
 			this.cartItems = JSON.parse(storedCart);
+			this.#cartCount = this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
 		  } catch (error) {
 			console.error("Parsing error:", error);
 			this.cartItems = [];
+			this.#cartCount = 0;
 		  }
 		} else {
 		  // If cart is not yet set in localStorage, use an empty array
 		  this.cartItems = [];
-		}
+		  this.#cartCount = 0;
+		}	
 	}
 
 	//saves cartItems to localStorage
@@ -34,12 +43,6 @@ class Cart {
 		localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
 	}
 
-
-
-	//helper function for renderCartCount
-	loadCartCount() {
-		return this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-	}
 	
 	renderCartCount() {
 		document.querySelector('.js-cart-quantity').textContent = this.#cartCount;
@@ -67,6 +70,7 @@ class Cart {
 		}
 	
 		this.saveToStorage();
+		this.renderCartCount();
 	}
 
 	makeAddToCartInteractive() {
@@ -84,6 +88,7 @@ class Cart {
 	removeFromCart(productId) {
 		this.cartItems = this.cartItems.filter(cartItem => cartItem.productId !== productId);
 		this.saveToStorage();
+		this.renderCartCount();
 	}
 }
 
