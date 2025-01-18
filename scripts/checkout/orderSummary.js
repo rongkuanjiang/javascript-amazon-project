@@ -7,11 +7,69 @@ import { loadCheckout } from '../checkout.js';
 import { loadPaymentSummary } from './paymentSummary.js';
 export const currentTime = dayjs();
 
-//takes a cartItem and generates all the HTML for its delivery options
-function getDeliveryHTML(cartItem) {
-	//console.log('getdeliveryoptions beginning cart: ', cartItem);
+
+
+//DELIVERY SECTION
+
+//helper function for prepareDeliveryOptionsFor
+//takes the deliveryOptionId of the cartItem in question and
+//matches it with the optionNumber from the HTML generated 
+function checkedOrNot(deliveryOptionId, optionNumber){
+	//console.log('deliveryoptionid and optionnumber', deliveryOptionId, optionNumber);
+	if (String(deliveryOptionId) === String(optionNumber)) {
+		return 'checked';
+	}
+	else {
+		return '';
+	}
+}
+
+
+//helper function for getDeliveryHTMLFor; 
+//returns an array of objects. each object contains information 
+//about the specifics of one delivery option.
+function prepareDeliveryOptionsFor(cartItem) {
+	return deliveryOptions.map((deliveryOption) => {
+		const deliveryDate = currentTime.add(deliveryOption.deliveryTime, 'days');
+		const dateString = deliveryDate.format('dddd, MMMM D');
+		const checkedAttribute = checkedOrNot(cartItem.deliveryOptionId, deliveryOption.id);
+		const priceString = String(formatPrice(deliveryOption.priceCents));
+		return {
+			id: deliveryOption.id,
+			productId: cartItem.productId,
+			isChecked: checkedAttribute,
+			dateString: dateString,
+			priceString: priceString
+		}
+	});	
+}
+
+//takes a cartItem and returns all the HTML for its delivery options
+function getDeliveryHTMLFor(cartItem) {
+	const deliveryOptionsDetails = prepareDeliveryOptionsFor(cartItem);
+
+	return deliveryOptionsDetails.map((deliveryOptionDetails) => {
+		return `
+		<div class="delivery-option"
+				data-option-id="${deliveryOptionDetails.id}"
+				data-product-id="${deliveryOptionDetails.productId}">
+			<input type="radio" ${deliveryOptionDetails.isChecked} 
+				class="delivery-option-input"
+				name="delivery-option-${cartItem.productId}">
+			<div>
+				<div class="delivery-option-date">
+				${deliveryOptionDetails.dateString}
+				</div>
+				<div class="delivery-option-price">
+				${deliveryOptionDetails.priceString} Shipping
+				</div>
+			</div>
+		</div>`;
+	}).join('');
+	
+	/*
 	let fullHTML = '';
-	deliveryOptions.forEach(deliveryOption => {
+	forEach(deliveryOption => {
 		const deliveryDate = currentTime.add(deliveryOption.deliveryTime, 'days');
 		const dateString = deliveryDate.format('dddd, MMMM D');
 		const checkedAttribute = checkedOrNot(cartItem.deliveryOptionId, deliveryOption.id);
@@ -36,9 +94,24 @@ function getDeliveryHTML(cartItem) {
 		fullHTML += html;
 	});
 	return fullHTML;
+	*/
 }
 
 export function makeDeliveryOptionButtonsInteractive() {
+	document.addEventListener('change', (event) => {
+		if (!event.target.matches('.delivery-option')) return;
+		
+		const newOptionId = event.target.dataset.optionId;
+		const productId = event.target.dataset.productId;
+		const cartItem = cart.cartItems.find(item => item.productId === productId);
+		if (cartItem) {
+			cartItem.deliveryOptionId = String(newOptionId);
+		}
+		cart.saveToStorage();
+		loadCheckout();
+	});
+
+	/*
 	// Select all radio buttons with .delivery-option-input
 	document.querySelectorAll('.delivery-option-input')
 	  .forEach((radio) => {
@@ -60,8 +133,25 @@ export function makeDeliveryOptionButtonsInteractive() {
 		  loadPaymentSummary();
 		});
 	  });
+	*/
 }
-  
+
+//renders the HTML for the delivery options of all cart items.
+//doesn't return anything.
+export function loadDeliveryOptions() {
+	document.querySelectorAll('.delivery-options-details').forEach((deliveryOptions) => {
+		const cartItemId = deliveryOptions.dataset.cartItemId;
+		const cartItem = cart.cartItems.find(item => item.productId === cartItemId);
+
+		const html = getDeliveryHTMLFor(cartItem);
+		deliveryOptions.innerHTML = html;
+	});
+}
+
+
+
+
+
 export function makeDeleteButtonsInteractive() {
 	document.querySelectorAll('.js-cart-delete')
 	.forEach((deleteButton) => {
@@ -76,56 +166,60 @@ export function makeDeleteButtonsInteractive() {
 	});
 }
 
-export function loadDeliveryOptions() {
-	document.querySelectorAll('.delivery-options-details').forEach((deliveryOptions) => {
-		const cartItemId = deliveryOptions.dataset.cartItemId;
-		const cartItem = cart.cartItems.find(item => item.productId === cartItemId);
-
-		const html = getDeliveryHTML(cartItem);
-		deliveryOptions.innerHTML = html;
-	});
-}
-
-function checkedOrNot(deliveryOptionId, optionNumber){
-	//console.log('deliveryoptionid and optionnumber', deliveryOptionId, optionNumber);
-	if (String(deliveryOptionId) === String(optionNumber)) {
-		return 'checked';
-	}
-	else {
-		return '';
-	}
-}
-
+//main function here !! 
+// 
 export function loadOrderSummary() {
 	try {
-		const fullHTML = getOrderSummary();
-		if (fullHTML == '') {
-			document.querySelector('.js-order-summary').innerHTML = `
-			<div>Your cart is empty</div>
-			<div class="view-products-link"> 
-				<a href="./amazon.html">
-					View products
-				</a>
-			</div>
-			`;
-		} else {
-			document.querySelector('.js-order-summary').innerHTML = fullHTML;
-		}
+		//helper function 1: model
+		const orderData = getOrderSummaryData();
+
+		//helper function 2: view
+		renderOrderSummary(orderData);
 		loadDeliveryOptions();	
+
+		//helper function 3: controller
+		makeOrderSummaryInteractive();
+
 	} catch (error) {
-		console.log(error);
+		console.log('Error loading order summary: ', error);
 	}
 }
 
-function getOrderSummary() {
-	let fullHTML = '';
+
+function renderOrderSummary(orderData) {
+	try {
+	if (orderData.length === 0) {
+		document.querySelector('.js-order-summary').innerHTML = `
+		<div>Your cart is empty</div>
+		<div class="view-products-link"> 
+			<a href="./amazon.html">
+				View products
+			</a>
+		</div>
+		`;
+		return;
+	} else {
+		let orderSummaryHTML = buildOrderSummary(orderData);
+		document.querySelector('.js-order-summary').innerHTML = orderSummaryHTML;
+	}
+	} catch (e) {
+		console.log('renderOrderSummary error', e);
+	}
+}
+
+function getOrderSummaryData() {
+	return cart.cartItems;
+}
+
+function buildOrderSummary(orderData) {
+	let orderSummaryHTML = '';
 	
-	cart.cartItems.forEach(cartItem => {
+	orderData.forEach(cartItem => {
 		const productFullSpecification = getProduct(cartItem.productId);
 		const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
 		const dateString = currentTime.add(deliveryOption.deliveryTime, 'days').format('dddd, MMMM D');
 		
-		const html = `<div class="cart-item-container js-${cartItem.productId}">
+		const htmlOneProductOrderSummary = `<div class="cart-item-container js-${cartItem.productId}">
 		<div class="delivery-date">${dateString}</div>
 
 		<div class="cart-item-details-grid">
@@ -164,7 +258,13 @@ function getOrderSummary() {
 		</div>
 	</div>`;
 	
-	fullHTML += html; 
+	orderSummaryHTML += htmlOneProductOrderSummary; 
 	});
-	return fullHTML;
+
+	return orderSummaryHTML;
+}
+
+function makeOrderSummaryInteractive() {
+	makeDeleteButtonsInteractive();
+	makeDeliveryOptionButtonsInteractive();
 }

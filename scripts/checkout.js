@@ -42,9 +42,6 @@ export function loadCheckout() {
 		loadPaymentSummary();
 
 		cart.renderCartCount();
-
-		makeDeleteButtonsInteractive();	
-		makeDeliveryOptionButtonsInteractive();
 	} catch (error) {
 		console.log(error);
 	}	
