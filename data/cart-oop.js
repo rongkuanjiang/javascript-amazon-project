@@ -83,10 +83,22 @@ class Cart {
 	}
 
 	removeFromCart(productId) {
-		this.cartItems = this.cartItems.filter(cartItem => cartItem.productId !== productId);
-		this.saveToStorage();
-		this.#cartCount--;
+		// Find the cart item to remove
+		const itemToRemove = this.cartItems.find(cartItem => cartItem.productId === productId);
+	
+		// Check if the item exists
+		if (itemToRemove) {
+			// Subtract the item's quantity from the cart count
+			this.#cartCount -= itemToRemove.quantity;
+	
+			// Remove the item from the cart
+			this.cartItems = this.cartItems.filter(cartItem => cartItem.productId !== productId);
+	
+			// Save updated cart to storage
+			this.saveToStorage();
+		}
 	}
+	
 }
 
 

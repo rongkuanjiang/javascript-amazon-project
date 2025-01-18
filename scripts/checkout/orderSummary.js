@@ -4,7 +4,6 @@ import {formatPrice} from '../utils/money.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { loadCheckout } from '../checkout.js';
-import { loadPaymentSummary } from './paymentSummary.js';
 export const currentTime = dayjs();
 
 
@@ -14,14 +13,8 @@ export const currentTime = dayjs();
 //helper function for prepareDeliveryOptionsFor
 //takes the deliveryOptionId of the cartItem in question and
 //matches it with the optionNumber from the HTML generated 
-function checkedOrNot(deliveryOptionId, optionNumber){
-	//console.log('deliveryoptionid and optionnumber', deliveryOptionId, optionNumber);
-	if (String(deliveryOptionId) === String(optionNumber)) {
-		return 'checked';
-	}
-	else {
-		return '';
-	}
+function isOptionChecked(deliveryOptionId, optionNumber){
+	return String(deliveryOptionId) === String(optionNumber)
 }
 
 
@@ -32,7 +25,7 @@ function prepareDeliveryOptionsFor(cartItem) {
 	return deliveryOptions.map((deliveryOption) => {
 		const deliveryDate = currentTime.add(deliveryOption.deliveryTime, 'days');
 		const dateString = deliveryDate.format('dddd, MMMM D');
-		const checkedAttribute = checkedOrNot(cartItem.deliveryOptionId, deliveryOption.id);
+		const checkedAttribute = isOptionChecked(cartItem.deliveryOptionId, deliveryOption.id);
 		const priceString = String(formatPrice(deliveryOption.priceCents));
 		return {
 			id: deliveryOption.id,
@@ -50,11 +43,11 @@ function getDeliveryHTMLFor(cartItem) {
 
 	return deliveryOptionsDetails.map((deliveryOptionDetails) => {
 		return `
-		<div class="delivery-option"
-				data-option-id="${deliveryOptionDetails.id}"
-				data-product-id="${deliveryOptionDetails.productId}">
-			<input type="radio" ${deliveryOptionDetails.isChecked} 
+		<div class="delivery-option">
+			<input type="radio" ${deliveryOptionDetails.isChecked ? 'checked' : ''} 
 				class="delivery-option-input"
+				data-option-id="${deliveryOptionDetails.id}"
+				data-product-id="${deliveryOptionDetails.productId}"
 				name="delivery-option-${cartItem.productId}">
 			<div>
 				<div class="delivery-option-date">
@@ -66,74 +59,22 @@ function getDeliveryHTMLFor(cartItem) {
 			</div>
 		</div>`;
 	}).join('');
-	
-	/*
-	let fullHTML = '';
-	forEach(deliveryOption => {
-		const deliveryDate = currentTime.add(deliveryOption.deliveryTime, 'days');
-		const dateString = deliveryDate.format('dddd, MMMM D');
-		const checkedAttribute = checkedOrNot(cartItem.deliveryOptionId, deliveryOption.id);
-		//console.log(checkedAttribute);
-		const html = `
-		<div class="delivery-option">
-			<input type="radio" ${checkedAttribute} 
-				class="delivery-option-input"
-				name="delivery-option-${cartItem.productId}"
-				data-option-id="${deliveryOption.id}"
-				data-product-id="${cartItem.productId}">
-			<div>
-				<div class="delivery-option-date">
-				${dateString}
-				</div>
-				<div class="delivery-option-price">
-				${String(formatPrice(deliveryOption.priceCents))} Shipping
-				</div>
-			</div>
-		</div>`;
-		//console.log(html);
-		fullHTML += html;
-	});
-	return fullHTML;
-	*/
 }
 
 export function makeDeliveryOptionButtonsInteractive() {
 	document.addEventListener('change', (event) => {
-		if (!event.target.matches('.delivery-option')) return;
+		if (!event.target.matches('.delivery-option-input')) return;
 		
 		const newOptionId = event.target.dataset.optionId;
 		const productId = event.target.dataset.productId;
 		const cartItem = cart.cartItems.find(item => item.productId === productId);
 		if (cartItem) {
 			cartItem.deliveryOptionId = String(newOptionId);
+			cart.saveToStorage();
+			loadCheckout();
 		}
-		cart.saveToStorage();
-		loadCheckout();
 	});
 
-	/*
-	// Select all radio buttons with .delivery-option-input
-	document.querySelectorAll('.delivery-option-input')
-	  .forEach((radio) => {
-		radio.addEventListener('change', (event) => {
-		  const newOptionId = event.target.dataset.optionId;
-		  const productId = event.target.dataset.productId;
-		  //console.log(newOptionId, productId);
-		  // Update this cartItem in your cart array
-		  const cartItem = cart.cartItems.find(item => item.productId === productId);
-		  //console.log(cartItem);
-		  if (cartItem) {
-			cartItem.deliveryOptionId = String(newOptionId);
-		  }
-		  //console.log(cartItem);
-		  // console.log(cartItem.deliveryOptionId);
-		  // Persist to localStorage (or wherever you save)
-		  cart.saveToStorage();
-		  loadCheckout();
-		  loadPaymentSummary();
-		});
-	  });
-	*/
 }
 
 //renders the HTML for the delivery options of all cart items.
@@ -231,7 +172,7 @@ function buildOrderSummary(orderData) {
 			${productFullSpecification.name}
 			</div>
 			<div class="product-price">
-			${String(formatPrice(productFullSpecification.priceCents))}
+			${formatPrice(productFullSpecification.priceCents)}
 			</div>
 			<div class="product-quantity">
 			<span>
