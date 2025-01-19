@@ -9,18 +9,25 @@ async function renderCheckout() {
 	try {
 		
 		await loadProducts();
-		/*await new Promise((resolve) => {
-			loadCart(() => {
-				resolve();
-			});
-		}); */
 		loadCheckout();
 	} catch(error) {
 		console.log('load checkout error');
 	}	
 }
-
 renderCheckout();
+
+
+export function loadCheckout() {
+	try {
+		loadOrderSummary();
+		loadPaymentSummary();
+
+		cart.renderCartCount();
+	} catch (error) {
+		console.log(error);
+	}	
+}
+
 
 /*
 loadProductsFetch().then(() => {
@@ -36,14 +43,3 @@ loadProductsFetch().then(() => {
 
 //loadProducts(loadCheckout);
 //load checkout
-export function loadCheckout() {
-	try {
-		loadOrderSummary();
-		loadPaymentSummary();
-
-		cart.renderCartCount();
-	} catch (error) {
-		console.log(error);
-	}	
-}
-

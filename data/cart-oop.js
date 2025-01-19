@@ -1,8 +1,4 @@
 
-import { products, Product, Clothing } from "./products.js";
-
-
-
 class Cart {
 	cartItems;
 	#localStorageKey;

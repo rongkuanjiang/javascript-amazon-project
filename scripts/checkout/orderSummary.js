@@ -17,7 +17,7 @@ function isOptionChecked(deliveryOptionId, optionNumber){
 	return String(deliveryOptionId) === String(optionNumber)
 }
 
-
+//model
 //helper function for getDeliveryHTMLFor; 
 //returns an array of objects. each object contains information 
 //about the specifics of one delivery option.
@@ -37,6 +37,7 @@ function prepareDeliveryOptionsFor(cartItem) {
 	});	
 }
 
+//view
 //takes a cartItem and returns all the HTML for its delivery options
 function getDeliveryHTMLFor(cartItem) {
 	const deliveryOptionsDetails = prepareDeliveryOptionsFor(cartItem);
@@ -61,6 +62,25 @@ function getDeliveryHTMLFor(cartItem) {
 	}).join('');
 }
 
+
+//controller
+//renders the HTML for the delivery options of all cart items.
+//doesn't return anything.
+export function loadDeliveryOptions() {
+	document.querySelectorAll('.delivery-options-details').forEach((deliveryOptions) => {
+		const cartItemId = deliveryOptions.dataset.cartItemId;
+		const cartItem = cart.cartItems.find(item => item.productId === cartItemId);
+
+		const html = getDeliveryHTMLFor(cartItem);
+		deliveryOptions.innerHTML = html;
+	});
+}
+
+//controller
+//takes no arguments and returns nothing. 
+//adds an event listener to the Document that tracks delivery option radio buttons.
+//if the delivery option id is changed, makeDeliveryOptionButtonsInteractive saves
+//the new data to storage and then reloads checkout. 
 export function makeDeliveryOptionButtonsInteractive() {
 	document.addEventListener('change', (event) => {
 		if (!event.target.matches('.delivery-option-input')) return;
@@ -77,34 +97,18 @@ export function makeDeliveryOptionButtonsInteractive() {
 
 }
 
-//renders the HTML for the delivery options of all cart items.
-//doesn't return anything.
-export function loadDeliveryOptions() {
-	document.querySelectorAll('.delivery-options-details').forEach((deliveryOptions) => {
-		const cartItemId = deliveryOptions.dataset.cartItemId;
-		const cartItem = cart.cartItems.find(item => item.productId === cartItemId);
-
-		const html = getDeliveryHTMLFor(cartItem);
-		deliveryOptions.innerHTML = html;
-	});
-}
-
-
-
-
-
+//controller
+//takes no arguments and returns nothing.
+//adds an event listener to the Document that tracks the delete button.
+//if the delete button is clicked, makeDeleteButtonsInteractive saves
+//the new data to storage and then reloads checkout. 
 export function makeDeleteButtonsInteractive() {
-	document.querySelectorAll('.js-cart-delete')
-	.forEach((deleteButton) => {
-		deleteButton.addEventListener('click', () => {
-			const productId = deleteButton.dataset.productId;
-			cart.removeFromCart(productId);
-
-			const cartItemToRemove = document.querySelector(`.js-${productId}`);
-			cartItemToRemove.remove();
-			loadCheckout();
-		});
-	});
+	document.addEventListener('click', (event) => {
+		if (!event.target.matches('.js-cart-delete')) return;
+		const productId = event.target.dataset.productId;
+		cart.removeFromCart(productId);
+		loadCheckout();
+	});	
 }
 
 //main function here !! 
