@@ -4,7 +4,12 @@
 * fix issue where if you click the delivery buttons around a lot 
   it becomes exponentially slower
 
+testing:
+* add try/catches and throws
+* write tests
+
+extra features:
 * make it so that the delivery option changes when 
   the entire div is clicked instead of just the button
 
-* extra features
+

@@ -1,4 +1,4 @@
-import { calculatePrice } from "../scripts/utils/money.js";
+import { calculatePriceCentsToDollars } from "../scripts/utils/money.js";
 
 export function getProduct(productId) {
   return products.find((product) => {
@@ -22,7 +22,7 @@ export class Product {
   }
 
   getPrice() {
-    return calculatePrice(this.priceCents);
+    return calculatePriceCentsToDollars(this.priceCents);
   }
 
   getStarUrl() {
@@ -51,6 +51,32 @@ export class Clothing extends Product {
 
 export let products = [];
 
+
+export async function loadProducts() {
+
+  try {
+    const response = await fetch('https:supersimplebackend.dev/products');
+
+    // Ensure the response is okay
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const productsData = await response.json();
+
+    products = productsData.map((productDetails) => {
+      if (productDetails.type === 'clothing') {
+        return new Clothing(productDetails);
+      } else {
+        return new Product(productDetails);
+      }
+    });
+
+  } catch (e) {
+    console.log('loadProducts error', e);
+  }
+}
+/*
 export function loadProducts() {
   const productPromise = fetch('https:supersimplebackend.dev/products').
   then((response) => {
@@ -67,7 +93,9 @@ export function loadProducts() {
     console.log('error !!!', error);
   });
   return productPromise;
-}
+} */
+
+
 
 /*
 export function loadProducts(fun) {

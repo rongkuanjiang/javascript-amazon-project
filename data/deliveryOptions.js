@@ -1,5 +1,5 @@
-//takes a deliveryOptionId and returns 
-//the entire specification for the delivery option
+//Given an Id (0, 1, or 2), 
+//Returns the entire the delivery option specification
 export function getDeliveryOption(deliveryOptionId) {
 	let option;
 	deliveryOptions.forEach((deliveryOption) => {

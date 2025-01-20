@@ -1,5 +1,5 @@
 import { cart } from '../../data/cart-oop.js';
-import { calculatePrice } from '../utils/money.js';
+import { calculatePriceCentsToDollars, calculateItemsPrice, calculateShippingPrice } from '../utils/money.js';
 import { getDeliveryOption } from '../../data/deliveryOptions.js';
 import { getProduct } from '../../data/products.js';
 
@@ -26,18 +26,6 @@ function getPaymentSummaryData() {
 }
 
 
-//sums item prices from getPaymentSummaryData
-function calculateItemsPrice(paymentSummaryData) {
-  let itemsPrice = 0;
-  paymentSummaryData.forEach(itemPaymentData => itemsPrice += itemPaymentData.itemPrice);
-  return itemsPrice;
-}
-//sums shipping prices from getPaymentSummaryData
-function calculateShippingPrice(paymentSummaryData) {
-  let shippingPrice = 0;
-  paymentSummaryData.forEach(itemPaymentData => shippingPrice += itemPaymentData.shippingPrice);
-  return shippingPrice;
-}
 
 
 //
@@ -46,11 +34,11 @@ function getPaymentSummaryTotals (paymentSummaryData) {
 	const itemsPriceCents = calculateItemsPrice(paymentSummaryData);
 	const shippingPriceCents = calculateShippingPrice(paymentSummaryData);
   
-  const itemsPrice = calculatePrice(itemsPriceCents);
-  const shippingPrice = calculatePrice(shippingPriceCents);
-	const totalBeforeTax = calculatePrice(itemsPriceCents + shippingPriceCents);
-	const estimatedTax = calculatePrice(totalBeforeTax * 10);
-	const totalAfterTax = calculatePrice(totalBeforeTax * (100 + TAX_RATE)); 
+  const itemsPrice = calculatePriceCentsToDollars(itemsPriceCents);
+  const shippingPrice = calculatePriceCentsToDollars(shippingPriceCents);
+	const totalBeforeTax = calculatePriceCentsToDollars(itemsPriceCents + shippingPriceCents);
+	const estimatedTax = calculatePriceCentsToDollars(totalBeforeTax * 10);
+	const totalAfterTax = calculatePriceCentsToDollars(totalBeforeTax * (100 + TAX_RATE)); 
 
   return {
     itemsPrice,
