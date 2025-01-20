@@ -36,6 +36,9 @@ class Cart {
 		localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
 	}
 
+	getCartCount() {
+		return this.#cartCount;
+	}
 	
 	renderCartCount() {
 		document.querySelector('.js-cart-quantity').textContent = this.#cartCount;
