@@ -1,6 +1,6 @@
 * refactor paymentSummary done
 * refactor cart-oop? done
-* fix circular import
+* fix circular import done
 * fix issue where if you click the delivery buttons around a lot 
   it becomes exponentially slower
 

@@ -3,7 +3,6 @@ import { getProduct } from '../../data/products.js';
 import {formatPrice} from '../utils/money.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import { loadCheckout } from '../checkoutCore.js';
 export const currentTime = dayjs();
 
 
@@ -76,40 +75,6 @@ export function loadDeliveryOptions() {
 	});
 }
 
-//controller
-//takes no arguments and returns nothing. 
-//adds an event listener to the Document that tracks delivery option radio buttons.
-//if the delivery option id is changed, makeDeliveryOptionButtonsInteractive saves
-//the new data to storage and then reloads checkout. 
-export function makeDeliveryOptionButtonsInteractive() {
-	document.addEventListener('change', (event) => {
-		if (!event.target.matches('.delivery-option-input')) return;
-		
-		const newOptionId = event.target.dataset.optionId;
-		const productId = event.target.dataset.productId;
-		const cartItem = cart.cartItems.find(item => item.productId === productId);
-		if (cartItem) {
-			cartItem.deliveryOptionId = String(newOptionId);
-			cart.saveToStorage();
-			loadCheckout();
-		}
-	});
-
-}
-
-//controller
-//takes no arguments and returns nothing.
-//adds an event listener to the Document that tracks the delete button.
-//if the delete button is clicked, makeDeleteButtonsInteractive saves
-//the new data to storage and then reloads checkout. 
-export function makeDeleteButtonsInteractive() {
-	document.addEventListener('click', (event) => {
-		if (!event.target.matches('.js-cart-delete')) return;
-		const productId = event.target.dataset.productId;
-		cart.removeFromCart(productId);
-		loadCheckout();
-	});	
-}
 
 //main function here !! 
 // 
@@ -123,7 +88,7 @@ export function loadOrderSummary() {
 		loadDeliveryOptions();	
 
 		//helper function 3: controller
-		makeOrderSummaryInteractive();
+		//makeOrderSummaryInteractive();
 
 	} catch (error) {
 		console.log('Error loading order summary: ', error);
@@ -208,8 +173,8 @@ function buildOrderSummary(orderData) {
 
 	return orderSummaryHTML;
 }
-
+/*
 function makeOrderSummaryInteractive() {
-	makeDeleteButtonsInteractive();
+	onDeleteClick();
 	makeDeliveryOptionButtonsInteractive();
-}
+}*/

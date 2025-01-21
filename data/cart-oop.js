@@ -98,6 +98,9 @@ class Cart {
 		}
 	}
 	
+	findItem(productId) {
+		return this.cartItems.find(item => item.productId === productId);
+	}
 }
 
 

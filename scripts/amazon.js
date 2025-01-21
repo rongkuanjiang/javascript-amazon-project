@@ -6,11 +6,11 @@ import { products, loadProducts } from '../data/products.js';
 
 if (products.length === 0) {
 	loadProducts().then(() => {
-		renderMainPage();
+		loadMainPage();
 	});
 } else {
 	console.log(products);
-	renderMainPage();
+	loadMainPage();
 } 
 
 function getMainHTML () {
@@ -73,7 +73,6 @@ function getMainHTML () {
 }
 
 function renderMainPage() {
-
 	const productsHTML = getMainHTML();
 	//generate view of main section (it's a grid of products)
 	
@@ -81,11 +80,20 @@ function renderMainPage() {
 	
 	//generate view of HTML elements dependent on data
 	cart.renderCartCount();
+}
 
+function makeMainPageInteractive() {
 	//make HTML elements interactive
 	cart.makeAddToCartInteractive();
 	
 	//makeSearchInteractive();
+}
+
+function loadMainPage() {
+
+	renderMainPage();
+	makeMainPageInteractive();
+	
 }
 
 
