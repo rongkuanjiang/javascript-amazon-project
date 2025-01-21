@@ -2,17 +2,6 @@ import { cart } from '../data/cart-oop.js';
 import { products, loadProducts } from '../data/products.js';
 
 
-
-
-if (products.length === 0) {
-	loadProducts().then(() => {
-		loadMainPage();
-	});
-} else {
-	console.log(products);
-	loadMainPage();
-} 
-
 function getMainHTML () {
 	let productsHTML = '';
 
@@ -89,12 +78,16 @@ function makeMainPageInteractive() {
 	//makeSearchInteractive();
 }
 
-function loadMainPage() {
+async function loadMainPage() {
+	if (products.length === 0) {
+		await loadProducts();
+	} 
 
 	renderMainPage();
-	makeMainPageInteractive();
-	
+	makeMainPageInteractive();	
 }
+
+loadMainPage();
 
 
 

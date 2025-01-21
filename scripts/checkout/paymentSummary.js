@@ -1,7 +1,7 @@
 import { cart } from '../../data/cart-oop.js';
 import { calculatePriceCentsToDollars, calculateItemsPrice, calculateShippingPrice } from '../utils/money.js';
 import { getDeliveryOption } from '../../data/deliveryOptions.js';
-import { getProduct } from '../../data/products.js';
+import { getFullProduct } from '../../data/products.js';
 
 const TAX_RATE = 10;
 
@@ -14,7 +14,7 @@ const TAX_RATE = 10;
 function getPaymentSummaryData() {
   return cart.cartItems.map(({productId, deliveryOptionId, quantity}) => {
     
-    const productFullSpecification = getProduct(productId);
+    const productFullSpecification = getFullProduct(productId);
     const itemPrice = productFullSpecification.priceCents * quantity;
     const shippingPrice = getDeliveryOption(deliveryOptionId).priceCents;
 

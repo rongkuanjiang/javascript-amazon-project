@@ -1,5 +1,5 @@
 import { cart } from '../../data/cart-oop.js';
-import { getProduct } from '../../data/products.js';
+import { getFullProduct } from '../../data/products.js';
 import {formatPrice} from '../utils/money.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
@@ -125,7 +125,7 @@ function buildOrderSummary(orderData) {
 	let orderSummaryHTML = '';
 	
 	orderData.forEach(cartItem => {
-		const productFullSpecification = getProduct(cartItem.productId);
+		const productFullSpecification = getFullProduct(cartItem.productId);
 		const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
 		const dateString = currentTime.add(deliveryOption.deliveryTime, 'days').format('dddd, MMMM D');
 		

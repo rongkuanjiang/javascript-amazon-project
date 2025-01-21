@@ -1,5 +1,4 @@
 import { loadCheckout } from "./checkoutCore.js";
-import '../backend/backendPractice.js';
 import { loadProducts } from '../data/products.js';
 import { onDeleteClick, onDeliveryChange } from "./utils/eventListeners.js";
 
@@ -9,8 +8,10 @@ async function renderCheckout() {
 		
 		await loadProducts();
 
-		//add event listeners once
+		//only the model and view
 		loadCheckout();
+
+		//add event listeners once
 		addEventListeners();
 		
 	} catch(error) {

@@ -1,6 +1,6 @@
 import { calculatePriceCentsToDollars } from "../scripts/utils/money.js";
 
-export function getProduct(productId) {
+export function getFullProduct(productId) {
   return products.find((product) => {
     return String(productId) === String(product.id);
   });
@@ -51,9 +51,7 @@ export class Clothing extends Product {
 
 export let products = [];
 
-
-export async function loadProducts() {
-
+async function fetchProducts() {
   try {
     const response = await fetch('https:supersimplebackend.dev/products');
 
@@ -62,16 +60,34 @@ export async function loadProducts() {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const productsData = await response.json();
+    return response;
+  } catch (e) {
+    console.log('fetchProducts error', e);
+  }
+}
 
-    products = productsData.map((productDetails) => {
-      if (productDetails.type === 'clothing') {
-        return new Clothing(productDetails);
-      } else {
-        return new Product(productDetails);
-      }
-    });
+async function parseProducts(fetchResponse) {
+  const productsData = await fetchResponse.json();
+  return productsData
+}
 
+function convertProductStringsToClasses(productsData) {
+  products = productsData.map((productDetails) => {
+    if (productDetails.type === 'clothing') {
+      return new Clothing(productDetails);
+    } else {
+      return new Product(productDetails);
+    }
+  });
+}
+
+
+export async function loadProducts() {
+  try {
+    const fetchResponse = await fetchProducts();
+    const productsData = await parseProducts(fetchResponse);
+    
+    convertProductStringsToClasses(productsData);
     return products;
   } catch (e) {
     console.log('loadProducts error', e);
