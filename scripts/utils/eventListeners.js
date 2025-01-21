@@ -1,3 +1,6 @@
+import {cart} from '../../data/cart-oop.js';
+import { loadCheckout } from '../checkoutCore.js';
+
 
 //controller
 //takes no arguments and returns nothing. 
