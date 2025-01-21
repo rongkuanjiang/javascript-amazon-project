@@ -1,5 +1,5 @@
-* refactor paymentSummary
-* refactor cart-oop?
+* refactor paymentSummary done
+* refactor cart-oop? done
 * fix circular import
 * fix issue where if you click the delivery buttons around a lot 
   it becomes exponentially slower
@@ -11,5 +11,8 @@ testing:
 extra features:
 * make it so that the delivery option changes when 
   the entire div is clicked instead of just the button
+* make interactive search
+* add to cart amount counter
+* update quantity 
 
 

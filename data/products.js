@@ -72,6 +72,7 @@ export async function loadProducts() {
       }
     });
 
+    return products;
   } catch (e) {
     console.log('loadProducts error', e);
   }

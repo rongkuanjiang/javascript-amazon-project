@@ -2,7 +2,6 @@ import { cart } from '../data/cart-oop.js';
 import { products, loadProducts } from '../data/products.js';
 
 
-let productsHTML = '';
 
 
 if (products.length === 0) {
@@ -14,11 +13,9 @@ if (products.length === 0) {
 	renderMainPage();
 } 
 
-//loadMainPage();
+function getMainHTML () {
+	let productsHTML = '';
 
-function renderMainPage() {
-
-	//generate view of main section (it's a grid of products)
 	products.forEach((product) => {
 		const html = `<div class="product-container">
 					<div class="product-image-container">
@@ -72,6 +69,14 @@ function renderMainPage() {
 				</div>`;
 		productsHTML += html;
 	});
+	return productsHTML;
+}
+
+function renderMainPage() {
+
+	const productsHTML = getMainHTML();
+	//generate view of main section (it's a grid of products)
+	
 	document.querySelector('.js-products-grid').innerHTML = productsHTML;
 	
 	//generate view of HTML elements dependent on data

@@ -3,7 +3,7 @@ import { getProduct } from '../../data/products.js';
 import {formatPrice} from '../utils/money.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import { loadCheckout } from '../checkout.js';
+import { loadCheckout } from '../checkoutCore.js';
 export const currentTime = dayjs();
 
 

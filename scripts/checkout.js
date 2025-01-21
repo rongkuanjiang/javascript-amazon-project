@@ -1,8 +1,6 @@
-import {makeDeliveryOptionButtonsInteractive, makeDeleteButtonsInteractive, loadDeliveryOptions, loadOrderSummary } from './checkout/orderSummary.js';
-import {loadPaymentSummary} from './checkout/paymentSummary.js';
+import { loadCheckout } from "./checkoutCore.js";
 import '../backend/backendPractice.js';
 import { loadProducts } from '../data/products.js';
-import { cart } from '../data/cart-oop.js';
 
 
 async function renderCheckout() {
@@ -17,16 +15,6 @@ async function renderCheckout() {
 renderCheckout();
 
 
-export function loadCheckout() {
-	try {
-		loadOrderSummary();
-		loadPaymentSummary();
-
-		cart.renderCartCount();
-	} catch (error) {
-		console.log(error);
-	}	
-}
 
 
 /*
