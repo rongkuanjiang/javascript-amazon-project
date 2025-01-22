@@ -70,15 +70,11 @@ class Cart {
 		this.renderCartCount();
 	}
 
-	makeAddToCartInteractive() {
-		document.querySelectorAll('.js-add-to-cart').forEach((addToCartButton) => {
-			addToCartButton.addEventListener('click', () => {
-				const productId = addToCartButton.dataset.productId;
-
-				this.addToCart(productId);
-			});
-		});
-		this.saveToStorage();
+	makeAddToCartInteractive(event) {
+		if (!event.target.matches('.js-add-to-cart')) return;
+			
+		const productId = event.target.dataset.productId;
+		this.addToCart(productId);
 	}
 
 	removeFromCart(productId) {

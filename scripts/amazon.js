@@ -71,11 +71,10 @@ function renderMainPage() {
 	cart.renderCartCount();
 }
 
-function makeMainPageInteractive() {
-	//make HTML elements interactive
-	cart.makeAddToCartInteractive();
-	
-	//makeSearchInteractive();
+function addMainPageEventlisteners() {
+	document.addEventListener('click', (event) => {
+		cart.makeAddToCartInteractive(event);
+	});
 }
 
 async function loadMainPage() {
@@ -84,7 +83,7 @@ async function loadMainPage() {
 	} 
 
 	renderMainPage();
-	makeMainPageInteractive();	
+	addMainPageEventlisteners();	
 }
 
 loadMainPage();
