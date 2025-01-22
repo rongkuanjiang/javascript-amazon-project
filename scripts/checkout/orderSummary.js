@@ -87,7 +87,7 @@ export function loadOrderSummary() {
 		renderOrderSummary(orderData);
 		loadDeliveryOptions();	
 
-		//helper function 3: controller
+		//no controller, controller is checkout.js
 		//makeOrderSummaryInteractive();
 
 	} catch (error) {
