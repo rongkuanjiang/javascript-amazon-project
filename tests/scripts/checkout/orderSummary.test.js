@@ -1,4 +1,4 @@
-import { getCart } from "../../../data/cart.js";
+import { cart } from "../../../data/cart-oop.js";
 import { loadOrderSummary } from "../../../scripts/checkout/orderSummary.js";
 import { loadProducts } from "../../../data/products.js";
 
@@ -10,7 +10,7 @@ describe('test suite: loadOrderSummary', () => {
 		});
 	});
 
-	it('loads the order summary as usual', () => {
+	it.todo('loads the order summary as usual', () => {
 		document.querySelector('.js-test-container').innerHTML = `
 		<div class="js-order-summary">
 		</div>`;

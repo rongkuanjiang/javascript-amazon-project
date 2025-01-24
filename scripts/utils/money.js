@@ -3,7 +3,7 @@ export function formatPrice(priceCents) {
 		return 'FREE';
 	}
 	else {
-		return `$${(Math.round(priceCents) / 100).toFixed(2)}`;
+		return `$${calculatePriceCentsToDollars(priceCents)}`;
 	}
 }
 
