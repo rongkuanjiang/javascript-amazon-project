@@ -1,4 +1,4 @@
-import { cart } from '../../data/cart-oop.js';
+import { cart } from '../../src/data/cart-oop.js';
 
 describe('test suite: addToCart', () => {
 

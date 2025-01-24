@@ -1,6 +1,6 @@
-import { cart } from "../../../data/cart-oop.js";
+import { cart } from "../../../src/data/cart-oop.js";
 import { loadOrderSummary } from "../../../scripts/checkout/orderSummary.js";
-import { loadProducts } from "../../../data/products.js";
+import { loadProducts } from "../../../src/data/products.js";
 
 describe('test suite: loadOrderSummary', () => {
 
